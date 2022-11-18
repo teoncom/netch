@@ -187,10 +187,10 @@ extern "C" {
 			puts("[Redirector][aio_init] !eh_init");
 			return FALSE;
 		}
-
-		if (nf_init("netfilter2", &EventHandler) != NF_STATUS_SUCCESS)
+		NF_STATUS initStatus = nf_init("nfdriver", &EventHandler);
+		if (initStatus != NF_STATUS_SUCCESS)
 		{
-			puts("[Redirector][aio_init] nf_init != NF_STATUS_SUCCESS");
+			puts("[Redirector][aio_init] nf_init != NF_STATUS_SUCCESS, NF_STATUS = " + initStatus);
 			return FALSE;
 		}
 
