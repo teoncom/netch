@@ -149,6 +149,8 @@ bool SocksHelper::SplitAddr(SOCKET client, PSOCKADDR_IN6 addr)
 			printf("[Redirector][SocksHelper::SplitAddr] Read IPv4 port failed: %d\n", WSAGetLastError());
 			return false;
 		}
+
+		ipv4->sin_port = htons(ipv4->sin_port);
 	}
 	else if (addrType == 0x04)
 	{
@@ -165,6 +167,8 @@ bool SocksHelper::SplitAddr(SOCKET client, PSOCKADDR_IN6 addr)
 			printf("[Redirector][SocksHelper::SplitAddr] Read IPv6 port failed: %d\n", WSAGetLastError());
 			return false;
 		}
+
+		addr->sin6_port = htons(addr->sin6_port);
 	}
 	else
 	{
@@ -407,7 +411,6 @@ int SocksHelper::UDP::Send(PSOCKADDR_IN6 target, const char* buffer, int length)
 	if (sendto(this->udpSocket, data, dataLength, 0, (PSOCKADDR)&this->address, (this->address.sin6_family == AF_INET ? sizeof(SOCKADDR_IN) : sizeof(SOCKADDR_IN6))) != dataLength)
 	{
 		delete[] data;
-
 		printf("[Redirector][SocksHelper::UDP::Send] Send packet failed: %d\n", WSAGetLastError());
 		return SOCKET_ERROR;
 	}
